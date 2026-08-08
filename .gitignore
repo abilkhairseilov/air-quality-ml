@@ -20,3 +20,4 @@ result-*
 # Editor / OS
 .DS_Store
 *.swp
+sync.sh
