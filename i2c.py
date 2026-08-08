@@ -6,16 +6,17 @@ I2C_ADDR = 0x62
 
 # https://sensirion.com/media/documents/E0F04247/631EF271/CD_DS_SCD40_SCD41_Datasheet_D1.pdf
 # 3.4 lists all the hex codes needed for a command. we simply have to establish some constants for them
-CMD_START_PERIODIC  = [0x21, 0xB1]
-CMD_STOP_PERIODIC   = [0x36, 0x15]
+CMD_START_PERIODIC = [0x21, 0xB1]
+CMD_STOP_PERIODIC = [0x36, 0x15]
 CMD_READ_MEASUREMENT = [0xEC, 0x05]
 
-def sensirion_common_generate_crc(data: list) -> int:
-    '''
+
+def sensirion_common_generate_crc(data: list[int]) -> int:
+    """
     Function to generate a CRC checksum for Sensirion devices.
-    Takes a list of data, and outputs an integer.
-    '''
-    crc = 0xff
+    Takes a list of integers, and outputs an integer.
+    """
+    crc = 0xFF
     for byte in data:
         crc ^= byte
         for _ in range(8):
@@ -23,6 +24,5 @@ def sensirion_common_generate_crc(data: list) -> int:
 
     return crc
 
-# def read_data():
 
-i2c_msg.write()
+_ = i2c_msg.write(I2C_ADDR, CMD_READ_MEASUREMENT)
