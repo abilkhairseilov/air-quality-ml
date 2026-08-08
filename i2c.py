@@ -26,14 +26,31 @@ def sensirion_common_generate_crc(data: list[int]) -> int:
     return crc
 
 
+def start_measurement():
+    with SMBus(1) as bus:
+        try:
+            write_frame = i2c_msg.write(I2C_ADDR, CMD_START_PERIODIC)
+            bus.i2c_rdwr(write_frame)
+        except Exception as error:
+            print(f"Start_measurement failed: {error}")
+
+
+def stop_measurement():
+    with SMBus(1) as bus:
+        try:
+            write_frame = i2c_msg.write(I2C_ADDR, CMD_STOP_PERIODIC)
+            bus.i2c_rdwr(write_frame)
+        except Exception as error:
+            print(f"Start_measurement failed: {error}")
+
+
 def read_measurement():
     with SMBus(1) as bus:
-        
         write_frame = i2c_msg.write(I2C_ADDR, CMD_READ_MEASUREMENT)
         print("create write_frame:", write_frame)
         bus.i2c_rdwr(write_frame)
         print("write_frame sent.")
-        
+
         sleep(1)
         print("Sleep passed.")
 
@@ -63,4 +80,14 @@ def read_measurement():
 
         return result
 
-_ = read_measurement()
+
+if __name__ == "__main__":
+    start_measurement()
+
+    sleep(10)
+
+    read_measurement()
+
+    sleep(1)
+
+    stop_measurement()
