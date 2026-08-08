@@ -1,0 +1,45 @@
+[project]
+name = "air-quality-ml"
+version = "0.1.0"
+description = "Embedded air-quality sensor reading (PM via serial, SCD4x via I2C)"
+requires-python = ">=3.11"
+dependencies = [
+  "pyserial",
+  "smbus2",
+]
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+extend-exclude = [".git", ".mypy_cache", ".ruff_cache", ".pytest_cache"]
+
+[tool.ruff.lint]
+# Enable a sensible baseline: pyflakes (F), pycodestyle (E,W), isort (I),
+# unused-arguments (ARG), bugbear (B), comprehensions (C4), simplifications (SIM).
+select = ["F", "E", "W", "I", "ARG", "B", "C4", "SIM", "UP"]
+ignore = [
+  "E501",  # line length is enforced by the formatter; let it wrap long strings
+]
+
+[tool.ruff.lint.per-file-ignores]
+"i2c.py" = ["F841"]  # placeholder until CRC routine is wired up
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.mypy]
+python_version = "3.11"
+files = ["main.py", "i2c.py"]
+warn_unused_ignores = true
+warn_redundant_casts = true
+no_implicit_optional = true
+check_untyped_defs = true
+
+# smbus2 has no type stubs and pyserial's are partial; don't fail the run on them.
+[[tool.mypy.overrides]]
+module = ["smbus2", "serial"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
