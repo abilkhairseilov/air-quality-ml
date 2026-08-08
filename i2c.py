@@ -10,6 +10,7 @@ I2C_ADDR = 0x62
 CMD_START_PERIODIC = [0x21, 0xB1]
 CMD_STOP_PERIODIC = [0x36, 0x15]
 CMD_READ_MEASUREMENT = [0xEC, 0x05]
+CMD_SINGLE_SHOT = [0x21, 0x9D]
 
 
 def sensirion_common_generate_crc(data: list[int]) -> int:
@@ -26,13 +27,22 @@ def sensirion_common_generate_crc(data: list[int]) -> int:
     return crc
 
 
+def single_shot():
+    with SMBus(1) as bus:
+        try:
+            write_frame = i2c_msg.write(I2C_ADDR, CMD_SINGLE_SHOT)
+            bus.i2c_rdwr(write_frame)
+        except Exception as error:
+            print(f"single_shot failed: {error}")
+
+
 def start_measurement():
     with SMBus(1) as bus:
         try:
             write_frame = i2c_msg.write(I2C_ADDR, CMD_START_PERIODIC)
             bus.i2c_rdwr(write_frame)
         except Exception as error:
-            print(f"Start_measurement failed: {error}")
+            print(f"start_measurement failed: {error}")
 
 
 def stop_measurement():
@@ -41,7 +51,7 @@ def stop_measurement():
             write_frame = i2c_msg.write(I2C_ADDR, CMD_STOP_PERIODIC)
             bus.i2c_rdwr(write_frame)
         except Exception as error:
-            print(f"Start_measurement failed: {error}")
+            print(f"stop_measurement failed: {error}")
 
 
 def read_measurement():
@@ -82,12 +92,10 @@ def read_measurement():
 
 
 if __name__ == "__main__":
-    start_measurement()
+    single_shot()
 
-    sleep(10)
+    sleep(6)
 
     read_measurement()
 
-    sleep(1)
-
-    stop_measurement()
+    print("PROGRAM END\n")
