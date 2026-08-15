@@ -55,17 +55,12 @@ class SCD41:
     def read_measurement(self, verbose: bool = False):
         with SMBus(1) as bus:
             write_frame = i2c_msg.write(I2C_ADDR, CMD_READ_MEASUREMENT)
-            print("create write_frame:", write_frame)
             bus.i2c_rdwr(write_frame)
-            print("write_frame sent.")
 
             sleep(1)
-            print("Sleep passed.")
 
             read_frame: i2c_msg = i2c_msg.read(I2C_ADDR, 9)
-            print("create read_frame:", read_frame)
             bus.i2c_rdwr(read_frame)
-            print("read_frame sent.")
 
             data_bytes: list[int] = list(read_frame)  # pyright: ignore[reportArgumentType, reportUnknownVariableType]
 
@@ -89,14 +84,12 @@ class SCD41:
             temperature_c = -45 + 175 * raw_temp / (2**16 - 1)
             humidity = 100 * raw_humidity / (2**16 - 1)
 
-            result = [co2_ppm, temperature_c, humidity]
-
             if verbose:
                 print(f"CO_2 ppm: {co2_ppm}")
                 print(f"Temperature (C): {temperature_c}")
                 print(f"Humidity: {humidity}")
 
-            return result
+            return (co2_ppm, temperature_c, humidity)
 
 
 if __name__ == "__main__":
