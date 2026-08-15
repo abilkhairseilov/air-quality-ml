@@ -9,7 +9,7 @@ class PMS5003:
     def __init__(self) -> None:
         self.ser: serial.Serial = serial.Serial(PORT, 9600, timeout=2)
 
-    def read_measurements(self, samples: int = 5) -> tuple[float, float, float]:
+    def read_measurement(self, samples: int = 5) -> tuple[float, float, float]:
         """
         Takes samples of measurements and returns the average of all samples taken.
         Takes an integer and returns a tuple with these measurements in order: PM_1, PM2.5, and PM_10.
@@ -61,4 +61,4 @@ if __name__ == "__main__":
 
     pms = PMS5003()
 
-    print(pms.read_measurements())
+    print(pms.read_measurement())
