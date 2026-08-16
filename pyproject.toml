@@ -2,10 +2,13 @@
 name = "air-quality-ml"
 version = "0.1.0"
 description = "Embedded air-quality sensor reading (PM via serial, SCD4x via I2C)"
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 dependencies = [
   "pyserial",
   "smbus2",
+  "pandas",
+  "ruff>=0.16.3",
+  "basedpyright>=1.39.10",
 ]
 
 [tool.ruff]
@@ -26,6 +29,8 @@ ignore = [
 
 [tool.ruff.format]
 docstring-code-format = true
+
+[tool.basedpyright]
 
 [tool.mypy]
 python_version = "3.11"
