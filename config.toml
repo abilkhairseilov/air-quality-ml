@@ -1,0 +1,8 @@
+[collection]
+output = "data/purifier"
+format = "csv" # maybe in the future
+interval_seconds = 30 # set a value between 30 to 60
+enabled = true # could have the program write to mulitple files at the same time
+
+[logging]
+verbose = true
