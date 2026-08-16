@@ -1,12 +1,11 @@
 import csv
 import os
 import time
+import tomllib
 from datetime import datetime
 
 from sensors.pms5003 import PMS5003
 from sensors.scd41 import SCD41
-
-CSV_PATH = "dataset.csv"
 
 FIELDS = [
     "timestamp",
@@ -16,18 +15,35 @@ FIELDS = [
     "pm1_ugm3",
     "pm25_ugm3",
     "pm10_ugm3",
+    "event",
 ]
 
 
-def ensure_csv_exists():
-    if not os.path.exists(CSV_PATH):
-        with open(CSV_PATH, "w", newline="") as f:
+def load_config(path="config.toml"):
+    with open(path, "rb") as f:
+        return tomllib.load(f)
+
+
+def ensure_csv_exists(csv_path):
+    if not os.path.exists(csv_path):
+        with open(csv_path, "w", newline="") as f:
             writer = csv.DictWriter(f, fieldnames=FIELDS)
             writer.writeheader()
 
 
 def main():
-    ensure_csv_exists()
+    config = load_config()
+
+    collection = config["collection"]
+    logging = config["logging"]
+
+    CSV_PATH = collection["output"]
+    INTERVAL = collection["interval_seconds"]
+    VERBOSE = logging["verbose"]
+
+    ensure_csv_exists(CSV_PATH)
+
+    print(f"Writing to path {CSV_PATH} with interval {INTERVAL}")
 
     scd41 = SCD41()
     pms5003 = PMS5003()
@@ -35,6 +51,7 @@ def main():
     scd41.stop_measurement()
     scd41.start_measurement()
 
+    # 5 second wait required to start measuring
     time.sleep(5)
 
     try:
@@ -53,19 +70,24 @@ def main():
                     "pm1_ugm3": pm1,
                     "pm25_ugm3": pm25,
                     "pm10_ugm3": pm10,
+                    "event": "",
                 }
 
                 writer.writerow(row)
                 f.flush()
 
-                time.sleep(30)
+                _ = print(row) if VERBOSE else None
+
+                time.sleep(INTERVAL)
 
     except KeyboardInterrupt:
-        print("Stopping collection...")
+        print(f"Stopping collection to file {CSV_PATH}")
 
     finally:
         scd41.stop_measurement()
 
 
 if __name__ == "__main__":
+    # config = load_config()
+    # print(config)
     main()
