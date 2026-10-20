@@ -18,7 +18,7 @@ class PMS5003:
         pm25 = []
         pm10 = []
 
-        for i in range(samples):
+        for _i in range(samples):
             data = self._read_frame()
 
             pm1.append(data[0])
