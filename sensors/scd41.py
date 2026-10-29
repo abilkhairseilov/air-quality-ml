@@ -92,6 +92,7 @@ class SCD41:
             return (co2_ppm, temperature_c, humidity)
 
 
+# testing
 if __name__ == "__main__":
     scd41 = SCD41()
     scd41.stop_measurement()

@@ -4,11 +4,30 @@ version = "0.1.0"
 description = "Embedded air-quality sensor reading (PM via serial, SCD4x via I2C)"
 requires-python = ">=3.12"
 dependencies = [
+  "numpy",
+  "pandas",
+  "scipy",
+  "scikit-learn",
+  "joblib",
+  "matplotlib",
+  "seaborn",
   "pyserial",
   "smbus2",
   "pandas",
   "ruff>=0.16.3",
   "basedpyright>=1.39.10",
+]
+
+[project.optional-dependencies]
+notebooks = [
+  "jupyterlab",
+  "ipykernel",
+  "ipywidgets",
+]
+dev = [
+  "ruff",
+  "mypy",
+  "pytest",
 ]
 
 [tool.ruff]

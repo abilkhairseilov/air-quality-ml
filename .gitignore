@@ -11,6 +11,7 @@ dist/
 .mypy_cache/
 .pytest_cache/
 .basedpyright/
+.ipynb_checkpoints/
 
 # Nix
 result
