@@ -1,4 +1,4 @@
-#Air quality ML
+# Air quality data collection system
 
 Enter the development environment with Nix:
 
