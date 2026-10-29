@@ -1,8 +1,8 @@
 [project]
 name = "air-quality-ml"
 version = "0.1.0"
-description = "Air-quality sensor collection, data analysis, and CPU model training"
-requires-python = ">=3.11"
+description = "Embedded air-quality sensor reading (PM via serial, SCD4x via I2C)"
+requires-python = ">=3.12"
 dependencies = [
   "numpy",
   "pandas",
@@ -13,6 +13,9 @@ dependencies = [
   "seaborn",
   "pyserial",
   "smbus2",
+  "pandas",
+  "ruff>=0.16.3",
+  "basedpyright>=1.39.10",
 ]
 
 [project.optional-dependencies]
@@ -45,6 +48,8 @@ ignore = [
 
 [tool.ruff.format]
 docstring-code-format = true
+
+[tool.basedpyright]
 
 [tool.mypy]
 python_version = "3.11"
